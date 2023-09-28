@@ -6,7 +6,9 @@ import 'package:intl/intl.dart';
 import 'package:money/entity/chitieu.dart';
 
 class ThemChiTieuView extends StatefulWidget {
-  const ThemChiTieuView({super.key});
+  const ThemChiTieuView({super.key, required this.themChiTieu});
+
+  final void Function(ChiTieu chiTieu) themChiTieu;
 
   @override
   State<ThemChiTieuView> createState() {
@@ -42,6 +44,7 @@ class _ThemChiTieuState extends State<ThemChiTieuView> {
     _priceInputController.dispose();
     super.dispose();
   }
+
 
   void _saveDateClick() {
     final enterPrice = double.tryParse((_priceInputController.text).trim());
@@ -87,19 +90,19 @@ class _ThemChiTieuState extends State<ThemChiTieuView> {
     }
     else {
       Fluttertoast.showToast(
-          msg: "${_titleInputController.text} - ${_priceInputController
-              .text} VND - ${dateFormatter.format(
-              _selectedDate!)} - ${_selectedCate.name}",
+          msg: "Thêm thành công",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
           textColor: Colors.white,
           fontSize: 16.0
       );
-      print("run");
+      ChiTieu chiTieu = ChiTieu("test", _titleInputController.text, double.tryParse(_priceInputController.text)!, _selectedDate! , _selectedCate);
+      widget.themChiTieu(chiTieu);
+      
+      Navigator.pop(context);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -193,6 +196,7 @@ class _ThemChiTieuState extends State<ThemChiTieuView> {
               ElevatedButton(
                 onPressed: () {
                   _saveDateClick();
+
                 },
                 child: const Text("Lưu"),
               )
